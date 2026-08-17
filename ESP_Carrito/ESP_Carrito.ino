@@ -1,6 +1,19 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <ESP32Servo.h>
+#include <Wire.h>
+#include <Adafruit_SSD1306.h>
+#include <Adafruit_GFX.h>
+
+// config pantalla
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+
+#define OLED_LEFT_ADD 0x3C
+#define OLED_RIGHT_ADD 0x3D
+
+Adafruit_SSD1306 display_left(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+Adafruit_SSD1306 display_right(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 // Config Servo
 const int inServo = 14;
@@ -20,7 +33,7 @@ const int in3 = 33;
 const int in4 = 32;
 
 // Acceso Wi-Fi
-const char *ssid = "CARRITO$$%?D:";
+const char *ssid = "CARRITO:PP";
 const char *password = "12345678";
 
 // Servidor web
@@ -37,7 +50,7 @@ void setup()
   pinMode(in3, OUTPUT);
   pinMode(in4, OUTPUT);
 
-  patada.attach(inServo);   // Único pin permitido para el servo
+  patada.attach(inServo); // Único pin permitido para el servo
 
   patada.write(reposo);
   delay(500);
@@ -60,12 +73,51 @@ void setup()
 
   server.begin();
   Serial.println("Todo bien :)))");
+
+  // Iniciar comunicación I2C
+  Wire.begin(21, 22); // SDA=GPIO21, SCL=GPIO22
+
+  // Inicializar pantalla izquierda
+  if (!display_left.begin(SSD1306_SWITCHCAPVCC, OLED_LEFT_ADD))
+  {
+    Serial.println("No se encontró OLED izquierda (0x3C)");
+    while (1)
+      ;
+  }
+
+  // Inicializar pantalla derecha
+  if (!display_right.begin(SSD1306_SWITCHCAPVCC, OLED_RIGHT_ADD))
+  {
+    Serial.println("No se encontró OLED derecha (0x3D)");
+    while (1)
+      ;
+  }
+
+  // Limpiar ambas pantallas
+  display_left.clearDisplay();
+  display_right.clearDisplay();
+
+  // Dibujar los ojos en sus respectivas pantallas
+  drawEyeLeft();  // función que dibuja el ojo izquierdo en display_left
+  drawEyeRight(); // función que dibuja el ojo derecho en display_right
+
+  // Mostrar en pantalla
+  display_left.display();
+  display_right.display();
 }
 
 // Main
 void loop()
 {
   server.handleClient();
+
+  // parpadeo de ojos
+  static unsigned long lastBlink = 0;
+  if (millis() - lastBlink > 3000)
+  { // parpadea cada 3 segundos
+    lastBlink = millis();
+    blinkBoth();
+  }
 }
 
 // HTML
@@ -651,4 +703,36 @@ void kick()
 
   patada.write(reposo);
   delay(300);
+}
+
+// ojos
+void drawEyeLeft()
+{
+  display_left.clearDisplay();
+  display_left.fillRoundRect(20, 12, 88, 40, 12, WHITE);
+  display_left.fillCircle(64, 32, 8, BLACK);
+  display_left.display();
+}
+
+void drawEyeRight()
+{
+  display_right.clearDisplay();
+  display_right.fillRoundRect(20, 12, 88, 40, 12, WHITE);
+  display_right.fillCircle(64, 32, 8, BLACK);
+  display_right.display();
+}
+
+void blinkBoth()
+{
+  display_left.clearDisplay();
+  display_left.drawLine(20, 32, 108, 32, WHITE);
+  display_left.display();
+
+  display_right.clearDisplay();
+  display_right.drawLine(20, 32, 108, 32, WHITE);
+  display_right.display();
+  delay(120);
+
+  drawEyeLeft();
+  drawEyeRight();
 }
