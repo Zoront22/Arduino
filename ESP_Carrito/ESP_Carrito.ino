@@ -75,7 +75,7 @@ void setup()
   Serial.println("Todo bien :)))");
 
   // Iniciar comunicación I2C
-  Wire.begin(21, 22); // SDA=GPIO21, SCL=GPIO22
+  Wire.begin(13, 12); // SDA=GPIO21, SCL=GPIO22
 
   // Inicializar pantalla izquierda
   if (!display_left.begin(SSD1306_SWITCHCAPVCC, OLED_LEFT_ADD))
