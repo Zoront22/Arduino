@@ -1,6 +1,6 @@
-# 🚗 ESP32 Carrito Inteligente - Control por WiFi
+# Robot Soccer - Control por WiFi
 
-Un proyecto de carrito robótico controlado por WiFi usando un **ESP32**, con capacidad de movimiento en 4 direcciones, mecanismo de patada servomotor y pantallas OLED con animaciones de ojos. Controlado mediante una interfaz web responsive.
+Un proyecto de carrito robótico controlado por WiFi usando un **ESP32**, con capacidad de movimiento en 4 direcciones, mecanismo de patada servomotor y pantallas OLED con animaciones de ojos. Controlado mediante una interfaz web.
 
 ---
 
@@ -22,10 +22,9 @@ Un proyecto de carrito robótico controlado por WiFi usando un **ESP32**, con ca
 
 - ✅ **Control WiFi en tiempo real** - Conecta vía Access Point (AP)
 - ✅ **Movimiento 4 direcciones** - Adelante, Atrás, Izquierda, Derecha
-- ✅ **Joystick virtual responsive** - Interfaz web compatible con móviles
-- ✅ **Mecanismo de patada** - Servo motor controlado
+- ✅ **Mecanismo de patada** - Servo motor 
 - ✅ **Pantallas OLED animadas** - Dos ojos con parpadeo automático (I2C)
-- ✅ **Interface web moderna** - Diseño adaptativo a cualquier tamaño de pantalla
+- ✅ **Interface web** - Diseño adaptativo a cualquier tamaño de pantalla
 - ✅ **Bajo consumo de recursos** - Optimizado para ESP32
 
 ---
@@ -33,15 +32,15 @@ Un proyecto de carrito robótico controlado por WiFi usando un **ESP32**, con ca
 ## 🔧 Hardware Requerido
 
 ### Microcontrolador
-- **1x ESP32** (NodeMCU-32S o similar)
+- **ESP32** (NodeMCU-32S o similar)
 
 ### Motores
-- **4x Motors DC** (para las 4 ruedas o movimiento)
-- **1x Servo Motor** (para el mecanismo de patada)
-- **1x Driver Motor** (L298N o similar, con 4 salidas PWM)
+- **Motor DC** (para las 4 ruedas o movimiento)
+- **Servo Motor** (para el mecanismo de patada)
+- **Driver Motor** (L298N o similar, con 4 salidas PWM)
 
 ### Sensores y Pantallas
-- **2x Pantalla OLED SSD1306** (128x64 píxeles, I2C)
+- **Pantalla OLED SSD1306** (128x64 píxeles, I2C)
   - Dirección 1: 0x3C
   - Dirección 2: 0x3D
 
@@ -49,12 +48,12 @@ Un proyecto de carrito robótico controlado por WiFi usando un **ESP32**, con ca
 - Conexión I2C para las pantallas
 
 ### Fuente de Poder
-- Batería o fuente de alimentación para motores (recomendado 5-12V)
+- Batería o fuente de alimentación para motores (5V)
 - Conexión USB para programar el ESP32
 
 ---
 
-## 📊 Estructura del Código
+## Estructura del Código
 
 ```
 ESP_Carrito.ino
@@ -83,7 +82,7 @@ ESP_Carrito.ino
 
 ---
 
-## 🔍 Explicación Detallada del Código
+## Código
 
 ### 1️⃣ **Includes - Librerías (Líneas 1-6)**
 
@@ -543,8 +542,6 @@ Si tus pantallas usan otras direcciones:
 #define OLED_RIGHT_ADD 0x3D  // Tu dirección 2
 ```
 
-Para identificar direcciones, usa un [I2C Scanner](https://create.arduino.cc/example/Wire/I2CScanner/I2CScanner).
-
 ---
 
 ## 📥 Instalación y Carga en ESP32
@@ -552,7 +549,6 @@ Para identificar direcciones, usa un [I2C Scanner](https://create.arduino.cc/exa
 ### **Paso 1: Instalar Arduino IDE**
 
 1. Descarga desde: https://www.arduino.cc/en/software
-2. Instala la versión más reciente
 
 ### **Paso 2: Agregar Soporte para ESP32**
 
@@ -571,10 +567,10 @@ Para identificar direcciones, usa un [I2C Scanner](https://create.arduino.cc/exa
 En Arduino IDE: Herramientas → Gestor de librerías
 
 Instala:
-- ✅ **Adafruit SSD1306** (por Adafruit) - para pantallas OLED
-- ✅ **Adafruit GFX Library** (por Adafruit) - gráficos base
-- ✅ **Adafruit BusIO** (por Adafruit) - comunicación I2C
-- ✅ **ESP32Servo** (por John K. Bennett) - control de servo
+- ✅ **Adafruit SSD1306** - para pantallas OLED
+- ✅ **Adafruit GFX Library** - gráficos base
+- ✅ **Adafruit BusIO** - comunicación I2C
+- ✅ **ESP32Servo** - control de servo
 
 ### **Paso 4: Conectar ESP32**
 
@@ -632,25 +628,8 @@ Espera a que se complete la carga.
 ### **Conectarse al WiFi**
 
 1. En tu móvil/PC, busca redes WiFi disponibles
-2. Conecta a: **"CARRITO:PP"** (contraseña: **12345678**)
-3. Abre navegador: **http://192.168.4.1**
-
-### **Controlar el Carrito**
-
-| Control | Acción |
-|---------|--------|
-| **Joystick ↑** | Adelante |
-| **Joystick ↓** | Atrás |
-| **Joystick ←** | Izquierda |
-| **Joystick →** | Derecha |
-| **Centro** | Parar |
-| **Botón ⚽** | Patada |
-
-### **Pantalla OLED**
-
-- Los ojos parpadean automáticamente cada 3 segundos
-- Son animaciones puramente decorativas
-
+2. Conecta a: **"CARRITO:PP"** (contraseña: **#######**)
+3. Abre navegador: **http://192.168.4.1** (Direccion IP del dispositivo)
 ---
 
 ## 📚 Librerías Utilizadas
@@ -678,53 +657,3 @@ Espera a que se complete la carga.
 ### **Adafruit_GFX.h**
 - Funciones gráficas base
 - Métodos: `fillRoundRect()`, `fillCircle()`, `drawLine()`
-
----
-
-## 🐛 Troubleshooting
-
-| Problema | Solución |
-|----------|----------|
-| **No aparece el WiFi "CARRITO:PP"** | Verifica que el ESP32 esté alimentado. Revisa el Monitor Serial. |
-| **No se conecta al carrito por WiFi** | Verifica contraseña (12345678). Reinicia ESP32. |
-| **Pantallas OLED no encienden** | Verifica direcciones I2C (0x3C, 0x3D). Revisa conexiones. |
-| **Motores no se mueven** | Verifica pines de conexión (in1-in4). Revisa Driver Motor. |
-| **Servo no funciona** | Verifica ángulos (reposo, preDisparo, disparo). |
-| **Error al subir código** | Verifica puerto COM y velocidad (115200). Presiona BOOT en ESP32 mientras sube. |
-
----
-
-## 📝 Notas Adicionales
-
-### **Seguridad**
-- Cambia la contraseña WiFi por defecto en producción
-- Esta es una red abierta en la misma ubicación
-
-### **Extensiones Futuras**
-- Agregar cámara (ESP32-CAM)
-- Control de velocidad PWM
-- Sensor de distancia ultrasónico
-- Control mediante app móvil
-
-### **Especificaciones**
-- **Lenguaje**: C++ (Arduino)
-- **Microcontrolador**: ESP32
-- **Voltaje**: 3.3V (lógica), 5-12V (motores)
-- **Consumo**: ~80-150mA en reposo, >500mA en movimiento
-- **Frecuencia WiFi**: 2.4 GHz (802.11b/g/n)
-
----
-
-## 📞 Soporte
-
-Para problemas o preguntas:
-1. Revisa el Monitor Serial para mensajes de error
-2. Verifica todas las conexiones físicas
-3. Reinstala librerías si hay conflictos
-4. Reinicia el ESP32 (desconecta/reconecta USB)
-
----
-
-**Creado con ❤️ para amantes de la robótica y Arduino**
-
-*Última actualización: 2026*
